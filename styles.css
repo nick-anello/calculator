@@ -4,6 +4,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: xenera, sans-serif
 }
 
 body {
@@ -16,7 +17,87 @@ body {
 
 #calculator {
     display: flex;
+    flex-direction: column;
     width: 269px;
     height: 469px;
-    background-color: blue;
+    background-color: #174696;
+    border-radius: 6px 6px 25px 25px;
+}
+
+#top-part {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  background-color: #1c2e75;
+  border-top: 2px solid #0e183d;
+  border-bottom: 2px solid #0e183d;
+  height: 90px;
+  width: 100%;
+}
+
+#screen {
+  background-color: #bfbfbf;
+  width: 80%;
+  height: 100%;
+  border: 5px solid #404040;
+}
+
+#middle-part {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80px;
+  border-bottom: 2px solid #0e183d;
+}
+
+#text-container {
+  display: flex;
+  justify-content: space-between;
+  color: #bababa;
+  width: 100%;
+  height: 40%;
+  padding: 8px 15px 0px 0px;
+  text-shadow:
+    0.5px 0.5px 0 #000,    /* Top-left */
+    -0.5px -0.5px 0 #000,  /* Bottom-right */
+    0.5px -0.5px 0 #000,   /* Top-right */
+    -0.5px 0.5px 0 #000;   /* Bottom-left */
+}
+
+#brand {
+  transform: scaleX(0.85);
+  font-size: 95%;
+}
+
+#model {
+  font-family: rockwell, serif;
+  font-size: 1.8em;
+  font-weight: bold;
+  margin-top: -6px;
+}
+
+#light-sensor-container {
+  width:100%;
+  height:100%;
+  padding-left: 14px;
+}
+
+#light-sensor {
+  display: flex;
+  width: 120px;
+  height: 38px;
+  background-color: white;
+}
+
+.sensor-cell {
+  border: 1px solid #0e183d;
+  background-color: #2b2b2b;
+  flex: 1;
+}
+
+#number-pad {
+  margin: 12px 10px 30px 10px;
+  border: 2px solid #0e183d;
+  border-radius: 5px;
+  height: 100%;
 }
