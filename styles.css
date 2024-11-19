@@ -91,13 +91,41 @@ body {
 
 .sensor-cell {
   border: 1px solid #0e183d;
-  background-color: #2b2b2b;
+  background-color: #4a3a34;
   flex: 1;
 }
 
-#number-pad {
+#buttons-container {
   margin: 12px 10px 30px 10px;
   border: 2px solid #0e183d;
   border-radius: 5px;
   height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+table {
+  table-layout: fixed;
+  border-spacing: 8px 12px;
+}
+
+td {
+  width: 46px;
+  height: 31px;
+  border-radius: 4px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.red {
+  background-color: #e64040;
+}
+
+.white {
+  background-color: #f0f0f0;
+}
+
+.tall {
+  height: 74px;
 }
