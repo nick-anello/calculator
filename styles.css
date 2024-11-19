@@ -86,7 +86,6 @@ body {
   display: flex;
   width: 120px;
   height: 38px;
-  background-color: white;
 }
 
 .sensor-cell {
@@ -114,18 +113,35 @@ td {
   width: 46px;
   height: 31px;
   border-radius: 4px;
+  border: 2px solid #0e183d;
   text-align: left;
   vertical-align: top;
+  font-family: Verdana, sans-serif;
+  cursor: pointer;
+}
+
+td:active {
+  filter: brightness(0.3);
 }
 
 .red {
   background-color: #e64040;
+  color: #f0f0f0;;
 }
 
 .white {
   background-color: #f0f0f0;
+  color: #0e183d;
 }
 
 .tall {
   height: 74px;
+}
+
+.small-text {
+  font-size: 0.8em;
+}
+
+.padding-left {
+  padding-left: 5px;
 }
