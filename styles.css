@@ -55,6 +55,7 @@ body {
   font-family: 'digital';
   font-size: 2.6em;
   text-align: right;
+  padding-right: 8px;
 }
 
 #middle-part {
@@ -77,6 +78,13 @@ body {
     -0.5px -0.5px 0 #000,  /* Bottom-right */
     0.5px -0.5px 0 #000,   /* Top-right */
     -0.5px 0.5px 0 #000;   /* Bottom-left */
+}
+
+#text-container, td {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 #brand {
