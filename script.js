@@ -2,7 +2,7 @@
  * @fileOverview logic for the calculator
  */
 
-let displayed, //current displayed value as a string
+let displayed, //current displayed value as a number
     lastButton, //last button pressed
     total, //current running total as a number
     operator, //current operation being performed
@@ -11,7 +11,7 @@ let displayed, //current displayed value as a string
 
 document.getElementById('ON/C').addEventListener('click', () => {
     //if calculator is off, turn it on and add button handlers
-    if (!displayed) {
+    if (!lastButton) {
         //add event listeners to handle button clicks
         document.querySelectorAll('td').forEach((td) => {
             td.addEventListener('click', () => {
@@ -20,25 +20,25 @@ document.getElementById('ON/C').addEventListener('click', () => {
                 if (isNumber(button)) {
                     //if '0' is not displayed, append the total
                     //if the last button was a number and 0 is not displayed, append the clicked number to the display
-                    if ((isNumber(lastButton) || lastButton === '+/-') && +displayed !== 0) {
-                        display(displayed += button);
+                    if ((isNumber(lastButton) || lastButton === '+/-') && displayed !== 0) {
+                        display(+(displayed.toString() += button));
                     }
                     //otherwise, display the clicked number
                     else {
-                        display(button);
+                        display(+button);
                     }
                     //if last button was an operator, set operator to calculate later
                     if (isOperator(lastButton)) {
                         operator = lastButton;
                     }
                     //set the operand to calculate later
-                    operand = +displayed;
+                    operand = displayed;
                 }
                 //else if button is an operator
                 else if (isOperator(button)) {
                     //if lastButton was a number, complete the pending calculation
                     if (isNumber(lastButton)) {
-                        operand = +displayed;
+                        operand = displayed;
                         calculate();
                     }
                 }
@@ -49,22 +49,22 @@ document.getElementById('ON/C').addEventListener('click', () => {
                 //else if button is '+/-'
                 else if (button === '+/-') {
                     //if displayed is not '0'
-                    if (+displayed) {
+                    if (displayed) {
                         //if last button was not an operator or equals
                         if (isOperator(lastButton) || lastButton === '=') {
                             //reset operator to prevent calculation
                             operator = '';
                         }
-                        display(+displayed * -1);
-                        operand = +displayed;
+                        display(displayed * -1);
+                        operand = displayed;
                         //if not making an operation, set total
-                        if (!operator) total = +displayed;
+                        if (!operator) total = displayed;
                     }
                 }
                 //else if button is '√'
                 else if (button === '√') {
-                    if (+displayed > 0) {
-                        const sqrt = Math.sqrt(+displayed);
+                    if (displayed > 0) {
+                        const sqrt = Math.sqrt(displayed);
                         total = sqrt;
                         operator = '';
                         display(sqrt);
@@ -133,6 +133,6 @@ function clear() {
  * @param {string} number - number to display
  */
 function display(number) {
-    document.getElementById('display').textContent = number;
+    document.getElementById('display').textContent = number.toString();
     displayed = number;
 }
