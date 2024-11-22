@@ -9,6 +9,7 @@ let displayed, //current displayed value as a number
     operand, //current operand
     memory; //current number stored in memory
 
+//add event listener to the 'ON/C' button to turn on the calculator
 document.getElementById('ON/C').addEventListener('click', () => {
     //if calculator is off, turn it on and add button handlers
     if (!displayed) {
@@ -21,6 +22,9 @@ document.getElementById('ON/C').addEventListener('click', () => {
     clear();
 });
 
+/**
+ * Handle button clicks
+ */
 function clickHandler() {
     const button = this.textContent;
     //if button is a number
@@ -140,7 +144,7 @@ function clear() {
 /**
  * Displays a number to the calculator screen
  *
- * @param {string} number - number to display
+ * @param {number} number - number to display
  */
 function display(number) {
     try {
@@ -148,12 +152,16 @@ function display(number) {
         if (string.includes('e')) throw new Error('overflow');
         const numParts = string.split('.');
         if (numParts.length === 2) {
+            //if first part of number is greater than 8 digits, it will not fit on the screen
             if (numParts[0].length > 8) throw new Error('overflow');
+            //if first part of number is 8 or 7 digits, exclude '.x' which will not fit on the screen
             if (numParts[0].length > 6) string = numParts[0];
             else {
+                //if first part of number is 6 or less digits, round the decimal and trim trailing zeros
                 string = number.toFixed(7 - numParts[0].length).replace(/0+$/, '');
             }
         }
+        //if there is no decimal and the string is greater than 8 digits, it will not fit on the screen
         else if (string.length > 8) throw new Error('overflow');
         document.getElementById('display').textContent = string;
         displayed = number;
@@ -164,6 +172,7 @@ function display(number) {
         operator = '';
         operand = NaN;
         document.getElementById('display').textContent = error.message;
+        //remove event listeners - they can be reenabled with the 'ON/C' button
         document.querySelectorAll('td').forEach((td) => {
             td.removeEventListener('click', clickHandler);
         });
