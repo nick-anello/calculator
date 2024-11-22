@@ -61,14 +61,21 @@ document.getElementById('ON/C').addEventListener('click', () => {
                         if (!operator) total = +displayed;
                     }
                 }
+                //else if button is '√'
+                else if (button === '√') {
+                    if (+displayed > 0) {
+                        const sqrt = Math.sqrt(+displayed);
+                        total = sqrt;
+                        operator = '';
+                        display(sqrt);
+                    }
+                    else clear();
+                }
                 lastButton = button;
             });
         });
     }
-    total = 0;
-    operator = '';
-    operand = NaN;
-    display('0');
+    clear();
 });
 
 /**
@@ -93,7 +100,9 @@ function isOperator(button) {
  * Calculates and displays the current operation
  */
 function calculate() {
+    //if making an operation
     if (operator) {
+        //do the operation and display the result
         switch (operator) {
             case '+':
                 total += operand; break;
@@ -106,7 +115,15 @@ function calculate() {
         }
         display(total.toString());
     }
+    //else set the total
     else total = +displayed;
+}
+
+function clear() {
+    total = 0;
+    operator = '';
+    operand = NaN;
+    display('0');
 }
 
 /**
