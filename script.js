@@ -114,7 +114,7 @@ function calculate() {
             case '÷':
                 total /= operand; break;
         }
-        display(total.toString());
+        display(total);
     }
     //else set the total
     else total = +displayed;
@@ -124,7 +124,7 @@ function clear() {
     total = 0;
     operator = '';
     operand = NaN;
-    display('0');
+    display(0);
 }
 
 /**
