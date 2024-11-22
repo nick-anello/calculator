@@ -17,7 +17,7 @@ document.getElementById('ON/C').addEventListener('click', () => {
             td.addEventListener('click', () => {
                 const button = td.textContent;
                 //if button is a number
-                if (['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(button)) {
+                if (isNumber(button)) {
                     //if '0' is not displayed, append the total
                     //if the last button was a number and 0 is not displayed, append the clicked number to the display
                     if (isNumber(lastButton) && +displayed !== 0) {
@@ -35,14 +35,15 @@ document.getElementById('ON/C').addEventListener('click', () => {
                     operand = +displayed;
                 }
                 //else if button is an operator
-                else if (['+', '-', 'x', '÷'].includes(button)) {
+                else if (isOperator(button)) {
                     if (isNumber(lastButton)) {
                         operand = +displayed;
                         calculate();
                     }
                 }
+                //else if button is equals
                 else if (button === '=') {
-                    calculate()
+                    calculate();
                 }
                 lastButton = button;
             });
