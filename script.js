@@ -126,7 +126,10 @@ function calculate() {
             case 'x':
                 total *= operand; break;
             case '÷':
-                total /= operand; break;
+                if (operand === 0) {
+                    return errorState('∞spooky∞');
+                }
+                else total /= operand; break;
         }
         display(total);
     }
@@ -167,14 +170,24 @@ function display(number) {
         displayed = number;
     }
     catch (error) {
-        displayed = NaN;
-        total = 0;
-        operator = '';
-        operand = NaN;
-        document.getElementById('display').textContent = error.message;
-        //remove event listeners - they can be reenabled with the 'ON/C' button
-        document.querySelectorAll('td').forEach((td) => {
-            td.removeEventListener('click', clickHandler);
-        });
+        errorState(error.message);
     }
+}
+
+/**
+ * Enters error state
+ * Calculator can be reset with the 'ON/C' button
+ *
+ * @param {string} message - message to display
+ */
+function errorState(message) {
+    displayed = NaN;
+    total = 0;
+    operator = '';
+    operand = NaN;
+    document.getElementById('display').textContent = message;
+    //remove event listeners - they can be reenabled with the 'ON/C' button
+    document.querySelectorAll('td').forEach((td) => {
+        td.removeEventListener('click', clickHandler);
+    });
 }
