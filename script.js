@@ -3,9 +3,10 @@
  */
 
 let displayed, //current displayed value as a string
-    total, //current running total as a number
     lastButton, //last button pressed
+    total, //current running total as a number
     operator, //current operation being performed
+    operand, //current operand
     memory; //current number stored in memory
 
 //add event listeners for the calculator buttons to handle click
@@ -19,7 +20,8 @@ Array.from(document.getElementsByTagName('td')).forEach((button) => {
  * @param {string} button - button identifier
  */
 function clickButton(button) {
-    if (lastButton || button === 'ON/C') {
+    //if calculator is already on or the on button was clicked, handle the button click
+    if (displayed || button === 'ON/C') {
         switch (button) {
             case '0':
             case '1': 
@@ -34,8 +36,8 @@ function clickButton(button) {
             case '+':
             case '-':
             case 'x':
-            case '÷': changeOperator(button); break;
-            case 'ON/C': clear(); break;
+            case '÷': clickOperator(button); break;
+            case 'ON/C': clear(); display('0'); break;
             case '=': calculate(); break;
             case '+/-': changeSign(); break;
             case '√': squareRoot(); break;
@@ -45,12 +47,30 @@ function clickButton(button) {
 }
 
 /**
- * Clears the calculator or turns it on
+ * Checks if button is a number
+ *
+ * @param {string} button - button identifier
+ */
+function isNumber(button) {
+    return ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(button);
+}
+
+/**
+ * Checks if button is an operator
+ *
+ * @param {string} button - button identifier
+ */
+function isOperator(button) {
+    return ['+', '-', 'x', '÷'].includes(button);
+}
+
+/**
+ * Clears the calculation globals
  */
 function clear() {
     total = 0;
     operator = '';
-    display('0');
+    operand = NaN;
 }
 
 /**
@@ -59,13 +79,20 @@ function clear() {
  * @param {string} number - number button identifier
  */
 function clickNumber(number) {
-    //
-    if (+lastButton || (+lastButton === 0 && +displayed !== 0)) {
+    //if the last button was a number and display is not "0", append the clicked number to the display
+    if (isNumber(lastButton) && +displayed !== 0) {
         display(displayed += number);
     }
+    //otherwise, display the clicked number
     else {
         display(number);
     }
+    //if last button was an operator, set operator to calculate later
+    if (isOperator(lastButton)) {
+        operator = lastButton;
+    }
+    //set the operand to calculate later
+    operand = +displayed;
 }
 
 /**
@@ -73,27 +100,23 @@ function clickNumber(number) {
  *
  * @param {string} button - button identifier
  */
-function changeOperator(button) {
-    total = +displayed;
-    calculate();
-    operator = button;
+function clickOperator(button) {
+    //if last button was a number, set the operand and calculate
+    if (isNumber(lastButton)) {
+        operand = +displayed;
+        calculate();
+    }
 }
 
 /**
  * Handles a change-sign button click
  */
 function changeSign() {
+    clear();
+    //if displayed is not "0", change its sign
     if (+displayed) {
         display((+displayed * -1).toString()); 
     }
-}
-
-/**
- * Handles a sqaureroot button click
- */
-function squareRoot() {
-    total = 0;
-    if (+displayed > 0) display(Math.sqrt(+displayed).toString());
 }
 
 /**
@@ -103,16 +126,17 @@ function calculate() {
     if (operator) {
         switch (operator) {
             case '+':
-                total = total + +displayed; break;
+                total += operand; break;
             case '-':
-                total = total - +displayed; break;
+                total -= operand; break;
             case 'x':
-                total = total * +displayed; break;
+                total *= operand; break;
             case '÷':
-                total = total / +displayed; break;
+                total /= operand; break;
         }
         display(total.toString());
     }
+    else total = +displayed;
 }
 
 /**
