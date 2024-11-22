@@ -20,7 +20,7 @@ document.getElementById('ON/C').addEventListener('click', () => {
                 if (isNumber(button)) {
                     //if '0' is not displayed, append the total
                     //if the last button was a number and 0 is not displayed, append the clicked number to the display
-                    if (isNumber(lastButton) && +displayed !== 0) {
+                    if ((isNumber(lastButton) || lastButton === '+/-') && +displayed !== 0) {
                         display(displayed += button);
                     }
                     //otherwise, display the clicked number
@@ -36,6 +36,7 @@ document.getElementById('ON/C').addEventListener('click', () => {
                 }
                 //else if button is an operator
                 else if (isOperator(button)) {
+                    //if lastButton was a number, complete the pending calculation
                     if (isNumber(lastButton)) {
                         operand = +displayed;
                         calculate();
@@ -44,6 +45,21 @@ document.getElementById('ON/C').addEventListener('click', () => {
                 //else if button is equals
                 else if (button === '=') {
                     calculate();
+                }
+                //else if button is '+/-'
+                else if (button === '+/-') {
+                    //if displayed is not '0'
+                    if (+displayed) {
+                        //if last button was not an operator or equals
+                        if (isOperator(lastButton) || lastButton === '=') {
+                            //reset operator to prevent calculation
+                            operator = '';
+                        }
+                        display(+displayed * -1);
+                        operand = +displayed;
+                        //if not making an operation, set total
+                        if (!operator) total = +displayed;
+                    }
                 }
                 lastButton = button;
             });
