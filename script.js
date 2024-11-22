@@ -21,7 +21,7 @@ document.getElementById('ON/C').addEventListener('click', () => {
                     //if '0' is not displayed, append the total
                     //if the last button was a number and 0 is not displayed, append the clicked number to the display
                     if ((isNumber(lastButton) || lastButton === '+/-') && displayed !== 0) {
-                        display(+(displayed.toString() += button));
+                        if (displayed.toString().length < 8) display(+(displayed.toString() + button));
                     }
                     //otherwise, display the clicked number
                     else {
@@ -133,6 +133,26 @@ function clear() {
  * @param {string} number - number to display
  */
 function display(number) {
-    document.getElementById('display').textContent = number.toString();
-    displayed = number;
+    try {
+        let string = number.toString();
+        const numParts = string.split('.');
+        if (numParts.length === 2) {
+            if (numParts[0].length > 8) throw new Error('overflow');
+            if (numParts[0].length > 6) string = numParts[0];
+            else string = number.toFixed(7 - numParts[0].length);
+        }
+        else if (string.length > 8) throw new Error('overflow');
+        document.getElementById('display').textContent = string;
+        displayed = number;
+    }
+    catch (error) {
+        displayed = NaN;
+        lastButton = '';
+        total = 0;
+        operator = '';
+        operand = NaN;
+        document.getElementById('display').textContent = error.message;
+        console.log(error);
+        console.log(error.message);
+    }
 }
