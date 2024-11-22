@@ -7,7 +7,7 @@ let displayed, //current displayed value as a number
     total, //current running total as a number
     operator, //current operation being performed
     operand, //current operand
-    memory; //current number stored in memory
+    memory = 0; //current number stored in memory
 
 //add event listener to the 'ON/C' button to turn on the calculator
 document.getElementById('ON/C').addEventListener('click', () => {
@@ -48,7 +48,7 @@ function clickHandler() {
     //else if button is an operator
     else if (isOperator(button)) {
         //if lastButton was a number, complete the pending calculation
-        if (isNumber(lastButton)) {
+        if (isNumber(lastButton) || lastButton ==='MRC' || lastButton === 'M+' || lastButton === 'M-') {
             operand = displayed;
             calculate();
         }
@@ -88,6 +88,34 @@ function clickHandler() {
         total = percent;
         operator = '';
         display(percent);
+    }
+    //else if button is 'MRC'
+    else if (button === 'MRC') {
+        //if 'MRC' was double clicked, clear memory
+        if (lastButton === 'MRC') {
+            memory = 0;
+            clear();
+        }
+        //else if lastButton was an operator, prepare for calculation
+        else if (isOperator(lastButton)) {
+            operator = lastButton;
+            operand = memory;
+            display(memory);
+        }
+        //else display memory
+        else {
+            total = memory;
+            operator = '';
+            display(memory);
+        }
+    }
+    //else if button is 'M+'
+    else if (button === 'M+') {
+        memory += displayed;
+    }
+    //else if button is 'M-'
+    else if (button === 'M-') {
+        memory -= displayed;
     }
     //set last button after handling button click
     lastButton = button;
@@ -137,6 +165,9 @@ function calculate() {
     else total = +displayed;
 }
 
+/**
+ * Clears the calculator
+ */
 function clear() {
     total = 0;
     operator = '';
@@ -185,6 +216,7 @@ function errorState(message) {
     total = 0;
     operator = '';
     operand = NaN;
+    memory = 0;
     document.getElementById('display').textContent = message;
     //remove event listeners - they can be reenabled with the 'ON/C' button
     document.querySelectorAll('td').forEach((td) => {
