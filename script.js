@@ -11,73 +11,83 @@ let displayed, //current displayed value as a number
 
 document.getElementById('ON/C').addEventListener('click', () => {
     //if calculator is off, turn it on and add button handlers
-    if (!lastButton) {
+    if (!displayed) {
         //add event listeners to handle button clicks
         document.querySelectorAll('td').forEach((td) => {
-            td.addEventListener('click', () => {
-                const button = td.textContent;
-                //if button is a number
-                if (isNumber(button)) {
-                    //if '0' is not displayed, append the total
-                    //if the last button was a number and 0 is not displayed, append the clicked number to the display
-                    if ((isNumber(lastButton) || lastButton === '+/-') && displayed !== 0) {
-                        if (displayed.toString().length < 8) display(+(displayed.toString() + button));
-                    }
-                    //otherwise, display the clicked number
-                    else {
-                        display(+button);
-                    }
-                    //if last button was an operator, set operator to calculate later
-                    if (isOperator(lastButton)) {
-                        operator = lastButton;
-                    }
-                    //set the operand to calculate later
-                    operand = displayed;
-                }
-                //else if button is an operator
-                else if (isOperator(button)) {
-                    //if lastButton was a number, complete the pending calculation
-                    if (isNumber(lastButton)) {
-                        operand = displayed;
-                        calculate();
-                    }
-                }
-                //else if button is equals
-                else if (button === '=') {
-                    calculate();
-                }
-                //else if button is '+/-'
-                else if (button === '+/-') {
-                    //if displayed is not '0'
-                    if (displayed) {
-                        //if last button was not an operator or equals
-                        if (isOperator(lastButton) || lastButton === '=') {
-                            //reset operator to prevent calculation
-                            operator = '';
-                        }
-                        display(displayed * -1);
-                        operand = displayed;
-                        //if not making an operation, set total
-                        if (!operator) total = displayed;
-                    }
-                }
-                //else if button is '√'
-                else if (button === '√') {
-                    if (displayed > 0) {
-                        const sqrt = Math.sqrt(displayed);
-                        total = sqrt;
-                        operator = '';
-                        display(sqrt);
-                    }
-                    else clear();
-                }
-                //set last button after handling button click
-                lastButton = button;
-            });
+            td.addEventListener('click', clickHandler);
         });
     }
+    lastButton = 'ON/C';
     clear();
 });
+
+function clickHandler() {
+    const button = this.textContent;
+    //if button is a number
+    if (isNumber(button)) {
+        //if '0' is not displayed, append the total
+        //if the last button was a number and 0 is not displayed, append the clicked number to the display
+        if ((isNumber(lastButton) || lastButton === '+/-') && displayed !== 0) {
+            if (displayed.toString().length < 8) display(+(displayed.toString() + button));
+        }
+        //otherwise, display the clicked number
+        else {
+            display(+button);
+        }
+        //if last button was an operator, set operator to calculate later
+        if (isOperator(lastButton)) {
+            operator = lastButton;
+        }
+        //set the operand to calculate later
+        operand = displayed;
+    }
+    //else if button is an operator
+    else if (isOperator(button)) {
+        //if lastButton was a number, complete the pending calculation
+        if (isNumber(lastButton)) {
+            operand = displayed;
+            calculate();
+        }
+    }
+    //else if button is equals
+    else if (button === '=') {
+        calculate();
+    }
+    //else if button is '+/-'
+    else if (button === '+/-') {
+        //if displayed is not '0'
+        if (displayed) {
+            //if last button was not an operator or equals
+            if (isOperator(lastButton) || lastButton === '=') {
+                //reset operator to prevent calculation
+                operator = '';
+            }
+            display(displayed * -1);
+            operand = displayed;
+            //if not making an operation, set total
+            if (!operator) total = displayed;
+        }
+    }
+    //else if button is '√'
+    else if (button === '√') {
+        if (displayed > 0) {
+            const sqrt = Math.sqrt(displayed);
+            total = sqrt;
+            operator = '';
+            display(sqrt);
+        }
+        else clear();
+    }
+    //else if button is '%'
+    else if (button === '%') {
+        const percent = displayed / 100;
+        total = percent;
+        operator = '';
+        display(percent);
+    }
+    //set last button after handling button click
+    lastButton = button;
+}
 
 /**
  * Checks if button is a number
@@ -135,11 +145,14 @@ function clear() {
 function display(number) {
     try {
         let string = number.toString();
+        if (string.includes('e')) throw new Error('overflow');
         const numParts = string.split('.');
         if (numParts.length === 2) {
             if (numParts[0].length > 8) throw new Error('overflow');
             if (numParts[0].length > 6) string = numParts[0];
-            else string = number.toFixed(7 - numParts[0].length);
+            else {
+                string = number.toFixed(7 - numParts[0].length).replace(/0+$/, '');
+            }
         }
         else if (string.length > 8) throw new Error('overflow');
         document.getElementById('display').textContent = string;
@@ -147,12 +160,12 @@ function display(number) {
     }
     catch (error) {
         displayed = NaN;
-        lastButton = '';
         total = 0;
         operator = '';
         operand = NaN;
         document.getElementById('display').textContent = error.message;
-        console.log(error);
-        console.log(error.message);
+        document.querySelectorAll('td').forEach((td) => {
+            td.removeEventListener('click', clickHandler);
+        });
     }
 }
