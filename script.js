@@ -39,8 +39,6 @@ function clickButton(button) {
             case '÷': clickOperator(button); break;
             case 'ON/C': clear(); display('0'); break;
             case '=': calculate(); break;
-            case '+/-': changeSign(); break;
-            case '√': squareRoot(); break;
         }
         lastButton = button;
     }
@@ -79,7 +77,7 @@ function clear() {
  * @param {string} number - number button identifier
  */
 function clickNumber(number) {
-    //if the last button was a number and display is not "0", append the clicked number to the display
+    //if the last button was a number and 0 is not displayed, append the clicked number to the display
     if (isNumber(lastButton) && +displayed !== 0) {
         display(displayed += number);
     }
@@ -111,13 +109,14 @@ function clickOperator(button) {
 /**
  * Handles a change-sign button click
  */
-function changeSign() {
+/*function changeSign() {
     clear();
     //if displayed is not "0", change its sign
     if (+displayed) {
         display((+displayed * -1).toString()); 
     }
-}
+    total = +displayed;
+}*/
 
 /**
  * Calculates and displays the current operation
