@@ -71,6 +71,7 @@ document.getElementById('ON/C').addEventListener('click', () => {
                     }
                     else clear();
                 }
+                //set last button after handling button click
                 lastButton = button;
             });
         });
