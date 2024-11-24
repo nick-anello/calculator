@@ -22,6 +22,18 @@ document.getElementById('ON/C').addEventListener('click', () => {
     clear();
 });
 
+document.getElementById('light-sensor').addEventListener('mouseover', () => {
+    document.getElementById('display').style.opacity = '0';
+});
+
+document.getElementById('light-sensor').addEventListener('mouseout', () => {
+    document.getElementById('display').style.opacity = '1';
+});
+
+document.getElementById('display').addEventListener('transitionend', () => {
+    if (document.getElementById('display').style.opacity === '0') errorState();
+});
+
 /**
  * Handle button clicks
  */
