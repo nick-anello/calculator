@@ -1,0 +1,1 @@
+This is a TI-108 emulator that I built using HTML, CSS, and JavaScript. Have fun calculating simple arithmetic expressions! But don't dare do anything that is not allowed by the laws of mathematics like dividing by zero... And be sure to keep your cursor away from the light sensor to make sure the calculator doesn't lose power!
